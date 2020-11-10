@@ -13,9 +13,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".ts"
-        ]
+        "extensions": [".ts"]
       }
     }
   },
@@ -23,21 +21,10 @@
     "jest": true
   },
   "rules": {
-    "no-console": [
-      "error"
-    ],
-    "quotes": [
-      2,
-      "single"
-    ],
-    "import/prefer-default-export": [
-      "off"
-    ],
-    "import/extensions": [
-      "off"
-    ],
-    "@typescript-eslint/no-explicit-any": [
-      "error"
-    ]
+    "no-console": ["error"],
+    "quotes": [2, "single"],
+    "import/prefer-default-export": ["off"],
+    "import/extensions": ["off"],
+    "@typescript-eslint/no-explicit-any": ["error"]
   }
 }
