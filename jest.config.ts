@@ -14,6 +14,7 @@ const config: Config.InitialOptions = {
       statements: 100,
     },
   },
+  coverageDirectory: '../coverage',
   slowTestThreshold: 0.5,
   verbose: true,
 };
