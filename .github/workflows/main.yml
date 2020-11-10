@@ -1,0 +1,26 @@
+# Basic code quality build/lint/test check
+
+name: CI Code Quality
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: '14.x'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test
+        env:
+          CI: true
