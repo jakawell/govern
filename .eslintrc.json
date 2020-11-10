@@ -8,10 +8,21 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "airbnb-base",
-    "prettier"
+    "airbnb-base"
   ],
+  "env": {
+    "jest": true
+  },
   "rules": {
-    "no-console": ["error"]
+    "no-console": [
+      "error"
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "import/prefer-default-export": [
+      "off"
+    ]
   }
 }

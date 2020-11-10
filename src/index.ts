@@ -1,2 +1,6 @@
+export function foo(): string {
+  return 'Hello world!';
+}
+
 // eslint-disable-next-line no-console
-console.log("Hello world!");
+console.log(foo());
