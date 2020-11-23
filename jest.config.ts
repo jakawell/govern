@@ -15,6 +15,10 @@ const config: Config.InitialOptions = {
     },
   },
   coverageDirectory: '../coverage',
+  coveragePathIgnorePatterns: [
+    '<rootDir>/index.ts', // only includes injection setup, which is impossible to properly mock
+    '<rootDir>/services/config.ts', // only includes switches based on environment variables
+  ],
   slowTestThreshold: 0.5,
   verbose: true,
 };
