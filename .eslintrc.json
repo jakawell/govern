@@ -23,8 +23,21 @@
   "rules": {
     "no-console": ["error"],
     "quotes": [2, "single"],
+    "no-use-before-define": ["off"],
+    "no-useless-constructor": ["off"],
+    "no-empty-function": ["off"],
+    "max-len": ["error", { "code": 100, "ignoreTrailingComments": true }],
     "import/prefer-default-export": ["off"],
     "import/extensions": ["off"],
     "@typescript-eslint/no-explicit-any": ["error"]
-  }
+  },
+  "overrides": [
+    {
+      "files": "*.test.ts",
+      "rules": {
+        "import/no-extraneous-dependencies": ["off"]
+      }
+    }
+  ],
+  "ignorePatterns": "vendor/**"
 }

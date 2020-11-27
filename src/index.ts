@@ -1,6 +1,5 @@
 import { ApiApplication } from './api/app';
-import { AppConfig } from './services/config';
-import { AppLogger } from './services/logger';
+import { AppConfig, AppLogger } from './services';
 
 // *************************************************************** //
 // **************************   IMPORTANT   ********************** //

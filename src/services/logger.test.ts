@@ -1,14 +1,25 @@
 import { Console, File } from 'winston/lib/winston/transports';
+import { Config } from './config';
 import { AppLogger } from './logger';
 
-describe('Logger service', () => {
-  it('creates logger for local development', () => {
-    // arrange
-    const logger = AppLogger.getInstance({
+describe('Service: Logger', () => {
+  function configFactory(overrides: Partial<Config> = {}): Config {
+    return {
       environment: 'development',
       logLevel: 'debug',
       appPort: 4001,
-    });
+      publicKey: 'public',
+      privateKey: 'secret',
+      ...overrides,
+    };
+  }
+
+  it('creates logger for local development', () => {
+    // arrange
+    const logger = AppLogger.getInstance(configFactory({
+      environment: 'development',
+      logLevel: 'debug',
+    }));
 
     // act
     logger.info('Test log');
@@ -21,11 +32,10 @@ describe('Logger service', () => {
 
   it('creates logger for deployed environment', () => {
     // arrange
-    const logger = AppLogger.getInstance({
+    const logger = AppLogger.getInstance(configFactory({
       environment: 'production',
       logLevel: 'info',
-      appPort: 4001,
-    });
+    }));
 
     // act
     logger.info('Test log');
