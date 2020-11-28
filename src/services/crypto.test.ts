@@ -68,4 +68,44 @@ CG6Woyn4uXBsKwDKgrzJF8tnv4KrFs9WXZ3tFhmhfJIb
     // act/assert
     expect(() => crypto.sign(testMessage)).toThrow('Failed to sign message.');
   });
+
+  it('verifies', () => {
+    // arrange
+    const testMessage = 'foobar';
+    const config = configFactory();
+    const crypto = new Crypto(config);
+    const signer = new JSEncrypt();
+    signer.setPrivateKey(config.privateKey);
+    const signature = signer.sign(testMessage, Crypto.digest, 'sha256') as string;
+
+    // act
+    const isVerified = crypto.verify(config.publicKey, 'foobar', signature);
+
+    // assert
+    expect(isVerified).toEqual(true);
+  });
+
+  it('encrypts', () => {
+    // arrange
+    const testMessage = 'foobar';
+    const config = configFactory();
+    const crypto = new Crypto(config);
+    const decrypter = new JSEncrypt();
+    decrypter.setPrivateKey(config.privateKey);
+
+    // act
+    const encryptedMessage = crypto.encrypt(config.publicKey, testMessage);
+
+    // assert
+    const decrypted = decrypter.decrypt(encryptedMessage);
+    expect(decrypted).toEqual(testMessage);
+  });
+
+  it('generates a uuid', () => {
+    // act
+    const uuid = Crypto.getUuid();
+
+    // assert
+    expect(uuid).toMatch(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/);
+  });
 });

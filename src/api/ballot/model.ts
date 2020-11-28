@@ -63,4 +63,10 @@ export type ReferendumSelector = 'single-choice' | 'multi-choice' | 'ranked-choi
 
 export interface BallotRepo {
   getBallot(id: string): Promise<Ballot>;
+
+  submitBallot(voteId: string, encryptedVoteId: string, ballot: Ballot): Promise<boolean>;
+}
+
+export interface KeyRepo {
+  getPublicKey(fingerprint: string): Promise<string>;
 }
