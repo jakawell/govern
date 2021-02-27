@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: ./votes-server
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -19,18 +21,24 @@ jobs:
         with:
           node-version: '14.x'
       - run: npm ci
+        working-directory: ${{env.WORKING_DIR}}
       - run: npm run lint
+        working-directory: ${{env.WORKING_DIR}}
       - run: npm run build
+        working-directory: ${{env.WORKING_DIR}}
       - run: npm test
+        working-directory: ${{env.WORKING_DIR}}
       - uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: coverage/
+          path: votes-server/coverage/
         env:
           CI: true
 
   security:
     runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: ./votes-server
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -39,6 +47,7 @@ jobs:
         with:
           node-version: '14.x'
       - run: npm audit
+        working-directory: ${{env.WORKING_DIR}}
         env:
           CI: true
 
