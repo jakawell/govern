@@ -1,7 +1,7 @@
 # Contributing to Govern
 
 Govern is a fully open source system, and all bug reports, ideas, and especially PRs are welcome.
-To contribute, first be sure that you read the [Code of Conduct](./CODE_OF_CONDUCT.md), as it is 
+To contribute, first be sure that you read the [Code of Conduct](../CODE_OF_CONDUCT.md), as it is 
 strictly enforced. Then you can follow the below guidelines so that you can get caught up with the
 team ASAP!
 
