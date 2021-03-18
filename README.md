@@ -12,3 +12,7 @@ directories, which each have README files of their own.
 ## Project planning
 
 The project is being tracked and managed [publicly on Trello](https://trello.com/b/T6SpDvkR).
+
+## Contributing
+
+Check out the [CONTRIBUTING](./docs/CONTRIBUTING.md) doc.
