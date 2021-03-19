@@ -1,3 +1,7 @@
+/* eslint-disable import/first */
+global.navigator = { appName: 'nodejs' } as never; // fake the navigator object for jsencrypt
+global.window = {} as never; // fake the window object for jsencrypt
+
 import { ApiApplication } from './api/app';
 import { AppConfig, AppLogger } from './services';
 

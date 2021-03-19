@@ -1,0 +1,2 @@
+# Local VS Code settings are ignored by Git so you can customize them as you like
+.vscode/settings.json
