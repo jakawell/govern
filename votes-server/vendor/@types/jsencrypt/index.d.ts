@@ -1,8 +1,11 @@
 declare module 'jsencrypt' {
   export interface IJSEncryptOptions {
-    default_key_size?: number; // default: 1024 the key size in bit
-    default_public_exponent?: string; // default: '010001' the hexadecimal representation of the public exponent
-    log?: boolean; // default: false whether log warn/error or not
+    /** The key size in bits. Default: 1024 */
+    default_key_size?: number;
+    /** The hexadecimal representation of the public exponent. Default: '010001' */
+    default_public_exponent?: string;
+    /** Whether log warn/error or not. Default: false */
+    log?: boolean;
   }
   
   export class JSEncrypt {
