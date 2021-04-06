@@ -19,14 +19,15 @@
 	"extensions": [
 		"streetsidesoftware.code-spell-checker",
     "dbaeumer.vscode-eslint",
-    "eamodio.gitlens"
+    "eamodio.gitlens",
+		"ms-azuretools.vscode-docker"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [4001],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "cd votes-server && npm ci",
+	"postCreateCommand": "bash .devcontainer/postCreate.sh",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node"
