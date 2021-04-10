@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "votes-server",
+			"path": "../votes-server"
+		},
+		{
+			"name": "docs",
+			"path": "../docs"
+		},
+		{
+			"name": ".devcontainer",
+			"path": "."
+		},
+		{
+			"name": ".github",
+			"path": "../.github"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"jsencrypt"
+		]
+	}
+}
