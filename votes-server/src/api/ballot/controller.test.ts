@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
+import nodeCrypto from 'crypto';
 import { Arg, Substitute } from '@fluffy-spoon/substitute';
-import { v4 as uuid } from 'uuid';
 import { Request, Response } from 'express';
 import { Request as RequestMock } from 'jest-express/lib/request';
 import { Response as ResponseMock } from 'jest-express/lib/response';
@@ -20,9 +20,9 @@ import { Ballot, BallotRepo, KeyRepo } from './model';
 describe('Controller: api/ballot', () => {
   function ballotFactory(overrides: Partial<Ballot> = {}): Ballot {
     return {
-      id: uuid(),
+      id: nodeCrypto.randomUUID(),
       referenda: [{
-        id: uuid(),
+        id: nodeCrypto.randomUUID(),
         information: {
           title: 'Referenda #1',
           description: 'Should we use this app?',
@@ -30,14 +30,14 @@ describe('Controller: api/ballot', () => {
         selector: 'single-choice',
         options: [
           {
-            id: uuid(),
+            id: nodeCrypto.randomUUID(),
             information: {
               title: 'Yes',
               description: 'We should',
             },
           },
           {
-            id: uuid(),
+            id: nodeCrypto.randomUUID(),
             information: {
               title: 'Hell no',
               description: 'We should not',
@@ -111,7 +111,7 @@ describe('Controller: api/ballot', () => {
   describe('POST', () => {
     it('submits a ballot', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';
@@ -306,7 +306,7 @@ digest: ${Crypto.digest(JSON.stringify({
 
     it('returns 401 if hashing algorithm is not SHA256', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';
@@ -360,7 +360,7 @@ digest: ${Crypto.digest(JSON.stringify({
 
     it('returns 401 if authentication is missing required components', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';
@@ -414,7 +414,7 @@ digest: ${Crypto.digest(JSON.stringify({
 
     it('returns 401 if signature is invalid', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';
@@ -475,7 +475,7 @@ digest: ${Crypto.digest(JSON.stringify({
 
     it('returns 400 if digest does not match', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';
@@ -529,7 +529,7 @@ digest: ${Crypto.digest(JSON.stringify({
 
     it('submits a ballot', async () => {
       // arrange
-      const voteId = uuid();
+      const voteId = nodeCrypto.randomUUID();
       const encryptedVoteId = 'encrypted';
       const ballot: Ballot = ballotFactory();
       const clientPublicKeyFingerprint = 'fingerprint';

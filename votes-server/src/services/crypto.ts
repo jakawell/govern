@@ -1,6 +1,6 @@
+import nodeCrypto from 'crypto';
 import { JSEncrypt } from 'jsencrypt';
 import { SHA256 } from 'crypto-js';
-import { v4 as uuid } from 'uuid';
 import { Config } from './config';
 
 export class Crypto {
@@ -32,7 +32,7 @@ export class Crypto {
   }
 
   public static getUuid(): string {
-    return uuid();
+    return nodeCrypto.randomUUID({ disableEntropyCache: true });
   }
 
   public static digest(message: string): string {
