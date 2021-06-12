@@ -4,10 +4,10 @@
 ARG VARIANT="14-buster"
 FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# [Optional] Uncomment if you want to install more global node packages
+# Upgrade to NPM 7
 RUN su node -c "npm install -g npm@7"
-RUN su node -c "npm install -g npm-check-updates"
+RUN sudo apt-get update \
+  # GPG: allows sharing of GPG keys with local machine
+  && sudo apt-get install gnupg2 -y \
+  # npm-check-updates: a utility that allows for checking all packages for updates (good for security)
+  && su node -c "npm install -g npm-check-updates"
