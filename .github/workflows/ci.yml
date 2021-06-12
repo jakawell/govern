@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-node@v2.1.2
         with:
           node-version: '14.x'
-      - run: npm audit
+      - run: npm run audit:check
         working-directory: ${{env.WORKING_DIR}}
         env:
           CI: true

@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "1753|ts-node-dev>dateformat>meow>trim-newlines": {
+      "decision": "ignore",
+      "madeAt": 1623459829543,
+      "expiresAt": 1626051813938
+    }
+  },
+  "rules": {},
+  "version": 1
+}
