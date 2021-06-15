@@ -35,6 +35,12 @@ pDBgVL/TiZbL8tpQ2PhB8Ofip7DEOVzc0uOmtcUys/Dd8gX+aiu4zRkgg7sQK8/w
 CG6Woyn4uXBsKwDKgrzJF8tnv4KrFs9WXZ3tFhmhfJIb
 -----END RSA PRIVATE KEY-----
 `,
+      databaseConfig: {
+        server: 'sqldata',
+        port: 1433,
+        user: 'test',
+        password: 'test',
+      },
       ...overrides,
     };
   }

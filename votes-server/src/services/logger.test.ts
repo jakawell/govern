@@ -10,6 +10,12 @@ describe('Service: Logger', () => {
       appPort: 4001,
       publicKey: 'public',
       privateKey: 'secret',
+      databaseConfig: {
+        server: 'sqldata',
+        port: 1433,
+        user: 'test',
+        password: 'test',
+      },
       ...overrides,
     };
   }
