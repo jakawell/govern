@@ -1,7 +1,6 @@
 # Govern: Complete democracy, for all
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
-
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/jakawell/govern)
 
 This is where I'm starting on work for a system called "Govern" which provides a way for
