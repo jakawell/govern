@@ -1,5 +1,7 @@
 # Developing for Govern
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/jakawell/govern)
+
 To ensure that all developers are able to get started quickly with all necessary dependencies, this
 project uses a [Visual Studio Code "dev container"](https://code.visualstudio.com/docs/remote/containers).
 This means that Code will automatically offer to create a Docker container pre-configured exactly
