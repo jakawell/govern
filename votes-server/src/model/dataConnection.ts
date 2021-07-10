@@ -1,8 +1,12 @@
-import { ConnectionPool } from 'mssql';
+import { ConnectionPool, config as MsSqlConfig } from 'mssql';
 import { AppConfig, Config } from '../services';
 
 export class DataConnection extends ConnectionPool {
   private static instance: DataConnection | null;
+
+  private constructor(config: MsSqlConfig) {
+    super(config);
+  }
 
   public static async getInstance(config: Config = AppConfig): Promise<DataConnection> {
     if (DataConnection.instance) {

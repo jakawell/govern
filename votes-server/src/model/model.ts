@@ -12,19 +12,36 @@ export type ModelOptions = {
 export class Model {
   private static readonly INPUT_ID = 'input';
 
-  public static async create<T extends ModelSchema>(record: T, table: string, options?: ModelOptions): Promise<number> {
+  public static async insert<T extends ModelSchema>(
+    records: Array<T>,
+    table: string,
+    options?: ModelOptions,
+  ): Promise<number> {
+    if (records.length === 0) {
+      return 0;
+    }
     const pool = options?.customPool ?? await DataConnection.getInstance();
     this.sanitize(table);
-    const keys = this.sanitizeKeys(Object.keys(record));
+    const keys = this.sanitizeKeys(Object.keys(records[0]));
     const request = pool.request();
     const command = `INSERT INTO ${table} (${keys.join(', ')}) VALUES (${
-      keys.map((_k, i) => `@${this.INPUT_ID}${i}`).join(', ')
+      records.map((_record, i) => keys.map((key) => `@${key}_${i}`).join(', ')).join('), (')
     });`;
-    keys.forEach((key, i) => {
-      request.input(`${this.INPUT_ID}${i}`, record[key]);
+    records.forEach((record, i) => {
+      keys.forEach((key) => {
+        request.input(`${key}_${i}`, record[key]);
+      });
     });
     const result = await request.query(command);
     return result.rowsAffected[0];
+  }
+
+  public static async create<T extends ModelSchema>(
+    record: T,
+    table: string,
+    options?: ModelOptions,
+  ): Promise<boolean> {
+    return (await this.insert([record], table, options)) === 1;
   }
 
   /**
