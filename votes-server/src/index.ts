@@ -4,7 +4,7 @@ global.window = {} as never; // fake the window object for jsencrypt
 
 import process from 'process';
 import { ApiApplication } from './api/app';
-import { DataConnection } from './model';
+import { DataConnection } from './dal';
 import { AppConfig, AppLogger } from './services';
 
 // *************************************************************** //

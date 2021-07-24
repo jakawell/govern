@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Crypto } from '../../services';
-import { Ballot, BallotRepo, KeyRepo } from './model';
+import { Ballot, BallotRepo, KeyRepo } from '../../dal/ballots.model';
 
 export type BallotRequest = {
   /** The ID of the requested ballot. */

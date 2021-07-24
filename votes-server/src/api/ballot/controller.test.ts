@@ -15,7 +15,7 @@ import {
   BallotSubmissionRequest,
   BallotSubmissionResponse,
 } from './controller';
-import { Ballot, BallotRepo, KeyRepo } from './model';
+import { Ballot, BallotRepo, KeyRepo } from '../../dal/ballots.model';
 
 describe('Controller: api/ballot', () => {
   function ballotFactory(overrides: Partial<Ballot> = {}): Ballot {

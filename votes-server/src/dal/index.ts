@@ -1,2 +1,2 @@
 export * from './dataConnection';
-export * from './model';
+export * from './ballots.model';

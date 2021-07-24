@@ -10,7 +10,7 @@ export type Ballot = {
   referenda: Array<Referendum>,
 
   /** Information about the ballot. */
-  information?: BallotInformation,
+  information: BallotInformation,
 }
 
 /** Information about a ballot, referendum, or option. */
@@ -22,10 +22,7 @@ export type BallotInformation = {
   description: string,
 
   /** Link to more information. */
-  infoUri?: string,
-
-  /** Ordered list of image URIs to include. */
-  imageUris?: Array<string>,
+  infoUri?: string | null,
 }
 
 /** An item on which to be voted. */
@@ -60,12 +57,6 @@ export type ReferendumOption = {
 
 /** How selections can be made for the referendum. */
 export type ReferendumSelector = 'single-choice' | 'multi-choice' | 'ranked-choice';
-
-export interface BallotRepo {
-  getBallot(id: string): Promise<Ballot>;
-
-  submitBallot(voteId: string, encryptedVoteId: string, ballot: Ballot): Promise<boolean>;
-}
 
 export interface KeyRepo {
   getPublicKey(fingerprint: string): Promise<string>;
