@@ -1,9 +1,5 @@
-/* eslint-disable import/first */
-global.navigator = { appName: 'nodejs' } as never; // fake the navigator object for jsencrypt
-global.window = {} as never; // fake the window object for jsencrypt
-
 import process from 'process';
-import { ApiApplication } from './api/app';
+import { VoterServiceApp } from './api/app';
 import { DataConnection } from './model';
 import { AppConfig, AppLogger } from './services';
 
@@ -17,7 +13,7 @@ import { AppConfig, AppLogger } from './services';
 
 const apiAppPort = AppConfig.appPort;
 const logger = AppLogger.getInstance(AppConfig);
-const apiApp = new ApiApplication(apiAppPort);
+const apiApp = new VoterServiceApp(apiAppPort);
 
 DataConnection
   .getInstance(AppConfig)
@@ -33,8 +29,8 @@ DataConnection
         logger.info('Disconnecting from data source...');
         try {
           await DataConnection.teardown();
-        } catch (error) {
-          logger.error(`Failed to disconnect from data source: ${error.message ?? error}`);
+        } catch (error: unknown) {
+          logger.error(`Failed to disconnect from data source: ${error instanceof Error ? error.message : error}`);
         }
         logger.info('Disconnected from database.');
 
@@ -42,6 +38,8 @@ DataConnection
       });
     });
   })
-  .catch((err: Error) => {
-    logger.error(`Failed to connect to data source, which means server startup was aborted: ${err.message ?? err}`);
+  .catch((err: unknown) => {
+    logger.error(`Failed to connect to data source, which means server startup was aborted: ${
+      err instanceof Error ? err.message : err
+    }`);
   });

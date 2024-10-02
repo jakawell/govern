@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
 import { Crypto } from '../../services';
 import { Ballot, BallotRepo, KeyRepo } from './model';
+import { Request } from '../../utils/request';
+import { Response } from '../../utils/response';
 
 export type BallotRequest = {
   /** The ID of the requested ballot. */
@@ -42,7 +43,7 @@ export class BallotController {
   ) { }
 
   async get(
-    req: Request<BallotRequest, BallotResponse>,
+    req: Request<BallotRequest, never>,
     res: Response<BallotResponse>,
   ): Promise<Response<BallotResponse>> {
     const { headers, params } = req;
@@ -55,7 +56,7 @@ export class BallotController {
 
     const encryptedNonce = nonce ? this.crypto.sign(nonce) : null;
 
-    return res.json({
+    return res.json(200, {
       encryptedVoteId,
       encryptedNonce,
       ballot,
@@ -63,7 +64,7 @@ export class BallotController {
   }
 
   async post(
-    req: Request<unknown, BallotSubmissionResponse, BallotSubmissionRequest>,
+    req: Request<never, BallotSubmissionRequest>,
     res: Response<BallotSubmissionResponse>,
   ): Promise<Response<BallotSubmissionResponse>> {
     // verify authentication header exists
@@ -74,7 +75,7 @@ export class BallotController {
       || !headers.digest
     ) {
       res.setHeader('WWW-Authenticate', 'Signature headers="(request-target) date digest"');
-      return res.status(401).json({
+      return res.json(401, {
         code: '401',
         message: 'Ballots must be submitted with a "Signature" Authorization header.',
       });
@@ -100,7 +101,7 @@ export class BallotController {
       || signatureComponents.algorithm.toLowerCase() !== 'rsa-sha256' // only allow SHA256 hashing
     ) {
       res.setHeader('WWW-Authenticate', 'Signature headers="(request-target) date digest"');
-      return res.status(401).json({
+      return res.json(401, {
         code: '401',
         message: 'The signature authentication header is malformed.',
       });
@@ -122,17 +123,19 @@ export class BallotController {
     const publicKey = await this.keyRepo.getPublicKey(signatureComponents.keyId);
     if (!this.crypto.verify(publicKey, expectedSigningString, signatureComponents.signature)) {
       res.setHeader('WWW-Authenticate', 'Signature headers="(request-target) date digest"');
-      return res.status(401).json({
+      return res.json(401, {
         code: '401',
         message: 'Invalid signature.',
       });
     }
 
+    const body = await req.loadBody();
+
     // verify digest
-    const hashedBody = Crypto.digest(JSON.stringify(req.body));
+    const hashedBody = Crypto.digest(JSON.stringify(body));
     if (hashedBody !== req.headers.digest) {
       res.setHeader('WWW-Authenticate', 'Signature headers="(request-target) date digest"');
-      return res.status(400).json({
+      return res.json(400, {
         code: '400',
         message: 'Invalid digest.',
       });
@@ -141,14 +144,14 @@ export class BallotController {
     // submit ballot
     const voteId = Crypto.getUuid();
     const encryptedVoteId = this.crypto.encrypt(publicKey, voteId);
-    if (await this.ballotRepo.submitBallot(voteId, encryptedVoteId, req.body.ballot)) {
-      return res.status(201).json({
+    if (await this.ballotRepo.submitBallot(voteId, encryptedVoteId, body.ballot)) {
+      return res.json(201, {
         encryptedVoteId,
       });
     }
 
     // alert to failed vote
-    return res.status(500).json({
+    return res.json(500, {
       code: '500',
       message: 'There was a failure while submitting the ballot. It has NOT been submitted. '
         + 'Try again later.',

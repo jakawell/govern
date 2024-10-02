@@ -1,13 +1,29 @@
-import express, { Express } from 'express';
-import { Server } from 'http';
+import { createServer, Server } from 'http';
+import { BallotController } from './ballot/controller';
+import { Request } from '../utils/request';
+import { Response } from '../utils/response';
 
-export class ApiApplication {
-  private readonly app: Express;
+export class VoterServiceApp {
+  private readonly app: Server;
 
   constructor(
     private readonly port: number,
   ) {
-    this.app = express();
+    this.app = createServer((req, res) => {
+      if (req.url === '/ballot') {
+        const controller = new BallotController(
+          new BallotRepo(),
+          new KeyRepo(),
+          new Crypto(),
+        );
+
+        if (req.method === 'GET') {
+          controller.get(new Request(req), new Response(res));
+        } else if (req.method === 'POST') {
+          controller.post(new Request(req), new Response(res));
+        }
+      }
+    });
   }
 
   start(callback: () => void): Server {
