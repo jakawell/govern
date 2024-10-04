@@ -1,8 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
-import { JSEncrypt } from 'jsencrypt';
 import { Config } from './config';
 import { Crypto } from './crypto';
 
@@ -54,25 +49,12 @@ CG6Woyn4uXBsKwDKgrzJF8tnv4KrFs9WXZ3tFhmhfJIb
     const testMessage = 'foobar';
     const config = configFactory();
     const crypto = new Crypto(config);
-    const verifier = new JSEncrypt();
-    verifier.setPublicKey(config.publicKey);
 
     // act
     const signature = crypto.sign(testMessage);
 
     // assert
-    expect(verifier.verify(testMessage, signature, Crypto.digest)).toBe(true);
-  });
-
-  it('recognizes signing errors', () => {
-    // arrange
-    jest.spyOn(JSEncrypt.prototype, 'sign').mockReturnValue(false);
-    const testMessage = 'foobar';
-    const config = configFactory();
-    const crypto = new Crypto(config);
-
-    // act/assert
-    expect(() => crypto.sign(testMessage)).toThrow('Failed to sign message.');
+    expect(Crypto.verify(config.publicKey, testMessage, signature)).toBe(true);
   });
 
   it('verifies', () => {
@@ -80,12 +62,10 @@ CG6Woyn4uXBsKwDKgrzJF8tnv4KrFs9WXZ3tFhmhfJIb
     const testMessage = 'foobar';
     const config = configFactory();
     const crypto = new Crypto(config);
-    const signer = new JSEncrypt();
-    signer.setPrivateKey(config.privateKey);
-    const signature = signer.sign(testMessage, Crypto.digest, 'sha256') as string;
+    const signature = crypto.sign(testMessage);
 
     // act
-    const isVerified = crypto.verify(config.publicKey, 'foobar', signature);
+    const isVerified = Crypto.verify(config.publicKey, 'foobar', signature);
 
     // assert
     expect(isVerified).toEqual(true);
@@ -96,14 +76,12 @@ CG6Woyn4uXBsKwDKgrzJF8tnv4KrFs9WXZ3tFhmhfJIb
     const testMessage = 'foobar';
     const config = configFactory();
     const crypto = new Crypto(config);
-    const decrypter = new JSEncrypt();
-    decrypter.setPrivateKey(config.privateKey);
 
     // act
-    const encryptedMessage = crypto.encrypt(config.publicKey, testMessage);
+    const encryptedMessage = Crypto.encrypt(config.publicKey, testMessage);
 
     // assert
-    const decrypted = decrypter.decrypt(encryptedMessage);
+    const decrypted = crypto.decrypt(encryptedMessage);
     expect(decrypted).toEqual(testMessage);
   });
 

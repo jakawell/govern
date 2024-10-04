@@ -1,7 +1,15 @@
 import { Crypto } from '../../services';
-import { Ballot, BallotRepo, KeyRepo } from './model';
 import { Request } from '../../utils/request';
 import { Response } from '../../utils/response';
+import { DataConnection, Ballot } from '../../model';
+
+export type ErrorResponse = {
+  /** Code to identify the error. */
+  code: string,
+
+  /** Human-readable error message. */
+  message?: string,
+}
 
 export type BallotRequest = {
   /** The ID of the requested ballot. */
@@ -17,7 +25,7 @@ export type BallotResponse = {
 
   /** The ballot. */
   ballot: Ballot
-}
+} | ErrorResponse;
 
 export type BallotSubmissionRequest = {
   /** The ballot. */
@@ -27,18 +35,11 @@ export type BallotSubmissionRequest = {
 export type BallotSubmissionResponse = {
   /** The unique vote ID, encrypted. */
   encryptedVoteId: string,
-} | {
-  /** Code to identify the error. */
-  code: string,
-
-  /** Human-readable error message. */
-  message?: string,
-}
+} | ErrorResponse;
 
 export class BallotController {
   constructor(
-    private readonly ballotRepo: BallotRepo,
-    private readonly keyRepo: KeyRepo,
+    private readonly dataConnection: DataConnection,
     private readonly crypto: Crypto,
   ) { }
 
@@ -48,7 +49,14 @@ export class BallotController {
   ): Promise<Response<BallotResponse>> {
     const { headers, params } = req;
 
-    const ballot = await this.ballotRepo.getBallot(params.ballotId);
+    const ballot = await this.dataConnection.getBallot(params.ballotId);
+
+    if (!ballot) {
+      return res.json(404, {
+        code: '404',
+        message: 'Ballot not found.',
+      });
+    }
 
     const nonce = headers['x-nonce'] as string;
 
@@ -108,6 +116,13 @@ export class BallotController {
     }
 
     // verify signature
+    const publicKey = await this.dataConnection.getPublicKey(signatureComponents.keyId);
+    if (!publicKey) {
+      return res.json(404, {
+        code: '404',
+        message: 'Public key not found.',
+      });
+    }
     const expectedSigningString = signatureComponents.headers
       .split(' ')
       .reduce<string>((acc, header) => {
@@ -120,7 +135,6 @@ export class BallotController {
         }
         return acc;
       }, '');
-    const publicKey = await this.keyRepo.getPublicKey(signatureComponents.keyId);
     if (!this.crypto.verify(publicKey, expectedSigningString, signatureComponents.signature)) {
       res.setHeader('WWW-Authenticate', 'Signature headers="(request-target) date digest"');
       return res.json(401, {
@@ -144,7 +158,7 @@ export class BallotController {
     // submit ballot
     const voteId = Crypto.getUuid();
     const encryptedVoteId = this.crypto.encrypt(publicKey, voteId);
-    if (await this.ballotRepo.submitBallot(voteId, encryptedVoteId, body.ballot)) {
+    if (await this.dataConnection.submitBallot(voteId, encryptedVoteId, body.ballot)) {
       return res.json(201, {
         encryptedVoteId,
       });

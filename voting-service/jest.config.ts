@@ -18,7 +18,6 @@ const config: Config.InitialOptions = {
   coveragePathIgnorePatterns: [
     '<rootDir>/index.ts', // only includes injection setup, which is impossible to properly mock
     '<rootDir>/services/config.ts', // only includes switches based on environment variables
-    '<rootDir>/model/dataConnection.ts', // includes actual low level access to Azure/MS SQL, which should only be covered with integration tests (not unit)
   ],
   slowTestThreshold: 0.5,
   verbose: true,

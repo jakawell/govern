@@ -1,0 +1,20 @@
+{
+  "configurations": [
+    {
+      "name": "Debug current file with Jest (voting-service)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/voting-service/node_modules/jest-cli/bin/jest.js",
+      "args": [
+        "${file}",
+        "--verbose",
+        "-i",
+        "--no-cache",
+        "--no-coverage"
+      ],
+      "cwd": "${workspaceFolder}/voting-service",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

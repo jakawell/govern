@@ -1,2 +1,3 @@
-export * from './dataConnection';
-export * from './model';
+export * from './connectors/dataConnection';
+export * from './ballot';
+export * from './referendum';

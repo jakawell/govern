@@ -1,12 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
 import nodeCrypto from 'crypto';
-import { Arg, Substitute } from '@fluffy-spoon/substitute';
-import { Request, Response } from 'express';
-import { Request as RequestMock } from 'jest-express/lib/request';
-import { Response as ResponseMock } from 'jest-express/lib/response';
 import { Crypto } from '../../services';
 import {
   BallotController,
@@ -15,7 +7,8 @@ import {
   BallotSubmissionRequest,
   BallotSubmissionResponse,
 } from './controller';
-import { Ballot, BallotRepo, KeyRepo } from './model';
+import { Ballot, DataConnection } from '../../model';
+import { MemoryDataConnection } from '../../model/connectors/memoryDataConnection';
 
 describe('Controller: api/ballot', () => {
   function ballotFactory(overrides: Partial<Ballot> = {}): Ballot {
@@ -52,11 +45,9 @@ describe('Controller: api/ballot', () => {
   describe('GET', () => {
     it('returns a ballot when requested via nonce', async () => {
       // arrange
+      const dataConnection = new MemoryDataConnection();
       const ballot: Ballot = ballotFactory();
-      const ballotRepo = Substitute.for<BallotRepo>();
-      ballotRepo.getBallot(ballot.id).resolves(ballot);
-      const keyRepo = Substitute.for<KeyRepo>();
-      const crypto = Substitute.for<Crypto>();
+      await dataConnection.submitBallot(ballot.id, '12345', ballot);
       crypto.sign('12345').returns('67890');
       crypto.sign(Arg.is.not((x) => x === '12345')).returns('abcde');
       const request = new RequestMock(`/api/ballot/${ballot.id}`);
